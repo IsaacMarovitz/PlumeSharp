@@ -20,8 +20,18 @@
     </ItemGroup>
     
     <ItemGroup>
+        <EmbeddedResource Include="Shaders\triangleVert.hlsl.spirv" />
+        <EmbeddedResource Include="Shaders\triangleFrag.hlsl.spirv" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$([System.OperatingSystem]::IsMacOS())' == 'true'">
         <EmbeddedResource Include="Shaders\triangleVert.hlsl.metallib" />
         <EmbeddedResource Include="Shaders\triangleFrag.hlsl.metallib" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$([System.OperatingSystem]::IsWindows())' == 'true'">
+        <EmbeddedResource Include="Shaders\triangleVert.hlsl.dxil" />
+        <EmbeddedResource Include="Shaders\triangleFrag.hlsl.dxil" />
     </ItemGroup>
 
 </Project>

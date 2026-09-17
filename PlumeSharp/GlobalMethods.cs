@@ -1,13 +1,16 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Plume
 {
     public static unsafe class GlobalMethods
     {
+        [SupportedOSPlatform("windows")]
         [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateD3D12InterfaceRaw")]
         [return: NativeTypeName("plume::RenderInterface *")]
         public static extern RenderInterface* CreateD3D12Interface();
 
+        [SupportedOSPlatform("macos")]
         [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateMetalInterfaceRaw")]
         [return: NativeTypeName("plume::RenderInterface *")]
         public static extern RenderInterface* CreateMetalInterface();

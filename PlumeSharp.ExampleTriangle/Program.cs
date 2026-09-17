@@ -25,7 +25,7 @@ namespace PlumeSharp.ExampleTriangle
                 return 1;
             }
 
-            var renderInterface = GlobalMethods.CreateMetalInterface();
+            var renderInterface = CreateRenderInterface(out var apiName);
             if (renderInterface == (RenderInterface*)IntPtr.Zero)
             {
                 Console.WriteLine("Failed to create interface");
@@ -34,11 +34,33 @@ namespace PlumeSharp.ExampleTriangle
                 return 1;
             }
 
-            RenderInterfaceTest(renderInterface, window, "Metal");
+            RenderInterfaceTest(renderInterface, window, apiName);
 
             SDL.DestroyWindow(window);
             SDL.Quit();
             return 0;
+        }
+
+        private static unsafe RenderInterface* CreateRenderInterface(out string apiName)
+        {
+            const bool useVulkan = false;
+
+            if (!useVulkan)
+            {
+                if (OperatingSystem.IsWindows())
+                {
+                    apiName = "D3D12";
+                    return GlobalMethods.CreateD3D12Interface();
+                }
+                else if (OperatingSystem.IsMacOS())
+                {
+                    apiName = "Metal";
+                    return GlobalMethods.CreateMetalInterface();
+                }
+            }
+
+            apiName = "Vulkan";
+            return GlobalMethods.CreateVulkanInterface();
         }
 
         private static unsafe void CreateFramebuffers(ref TestContext ctx)
@@ -79,15 +101,17 @@ namespace PlumeSharp.ExampleTriangle
             var vertexShader = (RenderShader*)IntPtr.Zero;
             var fragmentShader = (RenderShader*)IntPtr.Zero;
 
-            // Different entry point names depending on shader format
+            var vertEntry = Marshal.StringToCoTaskMemUTF8("VSMain");
+            var fragEntry = Marshal.StringToCoTaskMemUTF8("PSMain");
+
+            byte[] vertSource = [];
+            byte[] fragSource = [];
+
             switch (shaderFormat)
             {
                 case RenderShaderFormat.Metal:
-                    var vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.metallib");
-                    var fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.metallib");
-
-                    var vertEntry = Marshal.StringToCoTaskMemUTF8("VSMain");
-                    var fragEntry = Marshal.StringToCoTaskMemUTF8("PSMain");
+                    vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.metallib");
+                    fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.metallib");
 
                     fixed (void* vertData = vertSource)
                     fixed (void* fragData = fragSource)
@@ -97,17 +121,39 @@ namespace PlumeSharp.ExampleTriangle
                         fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
                             (sbyte*)fragEntry, RenderShaderFormat.Metal);
                     }
-
-                    Marshal.ZeroFreeCoTaskMemUTF8(vertEntry);
-                    Marshal.ZeroFreeCoTaskMemUTF8(fragEntry);
                     break;
                 case RenderShaderFormat.Spirv:
+                    vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.spirv");
+                    fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.spirv");
+
+                    fixed (void* vertData = vertSource)
+                    fixed (void* fragData = fragSource)
+                    {
+                        vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
+                            (sbyte*)vertEntry, RenderShaderFormat.Spirv);
+                        fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
+                            (sbyte*)fragEntry, RenderShaderFormat.Spirv);
+                    }
                     break;
                 case RenderShaderFormat.Dxil:
+                    vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.dxil");
+                    fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.dxil");
+
+                    fixed (void* vertData = vertSource)
+                    fixed (void* fragData = fragSource)
+                    {
+                        vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
+                            (sbyte*)vertEntry, RenderShaderFormat.Dxil);
+                        fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
+                            (sbyte*)fragEntry, RenderShaderFormat.Dxil);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            Marshal.ZeroFreeCoTaskMemUTF8(vertEntry);
+            Marshal.ZeroFreeCoTaskMemUTF8(fragEntry);
 
             // Define vertex input layout
             // The vertex format has position (vec3) and color (vec4)
@@ -124,7 +170,7 @@ namespace PlumeSharp.ExampleTriangle
             fixed (RenderInputSlot* inputSlot = &ctx.InputSlot)
             {
                 // Create graphics pipeline
-                var pipleineDesc = new RenderGraphicsPipelineDesc
+                var pipelineDesc = new RenderGraphicsPipelineDesc
                 {
                     InputSlots = inputSlot,
                     InputSlotsCount = 1,
@@ -136,10 +182,10 @@ namespace PlumeSharp.ExampleTriangle
                     RenderTargetCount = 1
                 };
 
-                pipleineDesc.RenderTargetFormat[0] = RenderFormat.B8G8R8A8Unorm;
-                pipleineDesc.RenderTargetBlend[0] = RenderBlendDesc.Copy();
+                pipelineDesc.RenderTargetFormat[0] = RenderFormat.B8G8R8A8Unorm;
+                pipelineDesc.RenderTargetBlend[0] = RenderBlendDesc.Copy();
 
-                ctx.Pipeline = ctx.Device->CreateGraphicsPipeline(&pipleineDesc);
+                ctx.Pipeline = ctx.Device->CreateGraphicsPipeline(&pipelineDesc);
             }
 
             Marshal.ZeroFreeCoTaskMemUTF8(positionSemantic);
