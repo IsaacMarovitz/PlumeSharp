@@ -1,0 +1,3 @@
+[submodule "sources/plume"]
+	path = sources/plume
+	url = https://IsaacMarovitz@github.com/IsaacMarovitz/plume.git
