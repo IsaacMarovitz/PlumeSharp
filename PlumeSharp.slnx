@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="PlumeSharp.ExampleTriangle/PlumeSharp.ExampleTriangle.csproj">
+    <BuildDependency Project="PlumeSharp/PlumeSharp.csproj" />
+  </Project>
+  <Project Path="PlumeSharp/PlumeSharp.csproj" />
+</Solution>

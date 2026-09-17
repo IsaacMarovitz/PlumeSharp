@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../PlumeSharp/PlumeSharp.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SDL3-CS" Version="3.4.16.1" />
+      <PackageReference Include="SDL3-CS.Native" Version="3.4.2" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <EmbeddedResource Include="Shaders\triangleVert.hlsl.metallib" />
+        <EmbeddedResource Include="Shaders\triangleFrag.hlsl.metallib" />
+    </ItemGroup>
+
+</Project>
