@@ -98,58 +98,42 @@ namespace PlumeSharp.ExampleTriangle
             var shaderFormat = ctx.RenderInterface->GetCapabilities()->ShaderFormat;
 
             // Create shader objects
-            var vertexShader = (RenderShader*)IntPtr.Zero;
-            var fragmentShader = (RenderShader*)IntPtr.Zero;
+            RenderShader* vertexShader;
+            RenderShader* fragmentShader;
+            byte[] vertSource;
+            byte[] fragSource;
 
-            var vertEntry = Marshal.StringToCoTaskMemUTF8("VSMain");
-            var fragEntry = Marshal.StringToCoTaskMemUTF8("PSMain");
-
-            byte[] vertSource = [];
-            byte[] fragSource = [];
+            const string vertName = "PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl";
+            const string fragName = "PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl";
 
             switch (shaderFormat)
             {
                 case RenderShaderFormat.Metal:
-                    vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.metallib");
-                    fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.metallib");
-
-                    fixed (void* vertData = vertSource)
-                    fixed (void* fragData = fragSource)
-                    {
-                        vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
-                            (sbyte*)vertEntry, RenderShaderFormat.Metal);
-                        fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
-                            (sbyte*)fragEntry, RenderShaderFormat.Metal);
-                    }
+                    vertSource = EmbeddedResources.ReadAllBytes($"{vertName}.metallib");
+                    fragSource = EmbeddedResources.ReadAllBytes($"{fragName}.metallib");
                     break;
                 case RenderShaderFormat.Spirv:
-                    vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.spirv");
-                    fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.spirv");
-
-                    fixed (void* vertData = vertSource)
-                    fixed (void* fragData = fragSource)
-                    {
-                        vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
-                            (sbyte*)vertEntry, RenderShaderFormat.Spirv);
-                        fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
-                            (sbyte*)fragEntry, RenderShaderFormat.Spirv);
-                    }
+                    vertSource = EmbeddedResources.ReadAllBytes($"{vertName}.spirv");
+                    fragSource = EmbeddedResources.ReadAllBytes($"{fragName}.spirv");
                     break;
                 case RenderShaderFormat.Dxil:
-                    vertSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleVert.hlsl.dxil");
-                    fragSource = EmbeddedResources.ReadAllBytes("PlumeSharp.ExampleTriangle/Shaders/triangleFrag.hlsl.dxil");
-
-                    fixed (void* vertData = vertSource)
-                    fixed (void* fragData = fragSource)
-                    {
-                        vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
-                            (sbyte*)vertEntry, RenderShaderFormat.Dxil);
-                        fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
-                            (sbyte*)fragEntry, RenderShaderFormat.Dxil);
-                    }
+                    vertSource = EmbeddedResources.ReadAllBytes($"{vertName}.dxil");
+                    fragSource = EmbeddedResources.ReadAllBytes($"{fragName}.dxil");
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(shaderFormat), shaderFormat, null);
+            }
+
+            var vertEntry = Marshal.StringToCoTaskMemUTF8("VSMain");
+            var fragEntry = Marshal.StringToCoTaskMemUTF8("PSMain");
+
+            fixed (void* vertData = vertSource)
+            fixed (void* fragData = fragSource)
+            {
+                vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
+                    (sbyte*)vertEntry, shaderFormat);
+                fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
+                    (sbyte*)fragEntry, shaderFormat);
             }
 
             Marshal.ZeroFreeCoTaskMemUTF8(vertEntry);
