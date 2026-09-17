@@ -1,4 +1,6 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Plume
 {
@@ -19,9 +21,19 @@ namespace Plume
         [NativeTypeName("uint64_t")]
         public ulong DedicatedVideoMemory = 0;
 
-        public RenderDeviceDescription() {
-            // TODO: This should default to "Unknown"
+        public RenderDeviceDescription()
+        {
             Name = default;
+            Span<sbyte> name = Name;
+            "Unknown"u8.CopyTo(MemoryMarshal.AsBytes(name));
+        }
+
+        public string GetName()
+        {
+            ReadOnlySpan<sbyte> name = Name;
+            var bytes = MemoryMarshal.AsBytes(name);
+            var length = bytes.IndexOf((byte)0);
+            return Encoding.UTF8.GetString(length < 0 ? bytes : bytes[..length]);
         }
 
         [InlineArray(256)]
