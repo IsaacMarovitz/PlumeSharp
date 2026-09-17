@@ -4,17 +4,17 @@ namespace Plume
 {
     public static unsafe class GlobalMethods
     {
-        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateD3D12InterfaceRaw")]
         [return: NativeTypeName("plume::RenderInterface *")]
-        public static extern RenderInterface* CreateD3D12InterfaceRaw();
+        public static extern RenderInterface* CreateD3D12Interface();
 
-        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateMetalInterfaceRaw")]
         [return: NativeTypeName("plume::RenderInterface *")]
-        public static extern RenderInterface* CreateMetalInterfaceRaw();
+        public static extern RenderInterface* CreateMetalInterface();
 
-        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateVulkanInterfaceRaw")]
         [return: NativeTypeName("plume::RenderInterface *")]
-        public static extern RenderInterface* CreateVulkanInterfaceRaw();
+        public static extern RenderInterface* CreateVulkanInterface();
 
         [return: NativeTypeName("uint32_t")]
         public static uint RenderFormatSize([NativeTypeName("plume::RenderFormat")] RenderFormat format)

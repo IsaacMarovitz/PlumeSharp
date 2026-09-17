@@ -16,7 +16,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(2)]
         [return: NativeTypeName("plume::RenderDescriptorSet *")]
-        public RenderDescriptorSet* CreateDescriptorSetRaw([NativeTypeName("const RenderDescriptorSetDesc &")] RenderDescriptorSetDesc* desc)
+        public RenderDescriptorSet* CreateDescriptorSet([NativeTypeName("const RenderDescriptorSetDesc &")] RenderDescriptorSetDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderDescriptorSetDesc*, RenderDescriptorSet*>)LpVtbl[2])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -24,7 +24,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(3)]
         [return: NativeTypeName("plume::RenderShader *")]
-        public RenderShader* CreateShaderRaw([NativeTypeName("const void *")] void* data, [NativeTypeName("uint64_t")] ulong size, [NativeTypeName("const char *")] sbyte* entryPointName, [NativeTypeName("plume::RenderShaderFormat")] RenderShaderFormat format)
+        public RenderShader* CreateShader([NativeTypeName("const void *")] void* data, [NativeTypeName("uint64_t")] ulong size, [NativeTypeName("const char *")] sbyte* entryPointName, [NativeTypeName("plume::RenderShaderFormat")] RenderShaderFormat format)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, void*, ulong, sbyte*, RenderShaderFormat, RenderShader*>)LpVtbl[3])((RenderDevice*)Unsafe.AsPointer(ref this), data, size, entryPointName, format);
         }
@@ -32,7 +32,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(4)]
         [return: NativeTypeName("plume::RenderSampler *")]
-        public RenderSampler* CreateSamplerRaw([NativeTypeName("const RenderSamplerDesc &")] RenderSamplerDesc* desc)
+        public RenderSampler* CreateSampler([NativeTypeName("const RenderSamplerDesc &")] RenderSamplerDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderSamplerDesc*, RenderSampler*>)LpVtbl[4])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -40,7 +40,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(5)]
         [return: NativeTypeName("plume::RenderPipeline *")]
-        public RenderPipeline* CreateComputePipelineRaw([NativeTypeName("const RenderComputePipelineDesc &")] RenderComputePipelineDesc* desc)
+        public RenderPipeline* CreateComputePipeline([NativeTypeName("const RenderComputePipelineDesc &")] RenderComputePipelineDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderComputePipelineDesc*, RenderPipeline*>)LpVtbl[5])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -48,7 +48,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(6)]
         [return: NativeTypeName("plume::RenderPipeline *")]
-        public RenderPipeline* CreateGraphicsPipelineRaw([NativeTypeName("const RenderGraphicsPipelineDesc &")] RenderGraphicsPipelineDesc* desc)
+        public RenderPipeline* CreateGraphicsPipeline([NativeTypeName("const RenderGraphicsPipelineDesc &")] RenderGraphicsPipelineDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderGraphicsPipelineDesc*, RenderPipeline*>)LpVtbl[6])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -56,7 +56,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(8)]
         [return: NativeTypeName("plume::RenderCommandQueue *")]
-        public RenderCommandQueue* CreateCommandQueueRaw([NativeTypeName("plume::RenderCommandListType")] RenderCommandListType type)
+        public RenderCommandQueue* CreateCommandQueue([NativeTypeName("plume::RenderCommandListType")] RenderCommandListType type)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderCommandListType, RenderCommandQueue*>)LpVtbl[8])((RenderDevice*)Unsafe.AsPointer(ref this), type);
         }
@@ -64,7 +64,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(9)]
         [return: NativeTypeName("plume::RenderBuffer *")]
-        public RenderBuffer* CreateBufferRaw([NativeTypeName("const RenderBufferDesc &")] RenderBufferDesc* desc)
+        public RenderBuffer* CreateBuffer([NativeTypeName("const RenderBufferDesc &")] RenderBufferDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderBufferDesc*, RenderBuffer*>)LpVtbl[9])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -72,7 +72,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(10)]
         [return: NativeTypeName("plume::RenderTexture *")]
-        public RenderTexture* CreateTextureRaw([NativeTypeName("const RenderTextureDesc &")] RenderTextureDesc* desc)
+        public RenderTexture* CreateTexture([NativeTypeName("const RenderTextureDesc &")] RenderTextureDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderTextureDesc*, RenderTexture*>)LpVtbl[10])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -80,7 +80,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(12)]
         [return: NativeTypeName("plume::RenderPool *")]
-        public RenderPool* CreatePoolRaw([NativeTypeName("const RenderPoolDesc &")] RenderPoolDesc* desc)
+        public RenderPool* CreatePool([NativeTypeName("const RenderPoolDesc &")] RenderPoolDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderPoolDesc*, RenderPool*>)LpVtbl[12])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -88,7 +88,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(13)]
         [return: NativeTypeName("plume::RenderPipelineLayout *")]
-        public RenderPipelineLayout* CreatePipelineLayoutRaw([NativeTypeName("const RenderPipelineLayoutDesc &")] RenderPipelineLayoutDesc* desc)
+        public RenderPipelineLayout* CreatePipelineLayout([NativeTypeName("const RenderPipelineLayoutDesc &")] RenderPipelineLayoutDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderPipelineLayoutDesc*, RenderPipelineLayout*>)LpVtbl[13])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -96,7 +96,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(14)]
         [return: NativeTypeName("plume::RenderCommandFence *")]
-        public RenderCommandFence* CreateCommandFenceRaw()
+        public RenderCommandFence* CreateCommandFence()
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderCommandFence*>)LpVtbl[14])((RenderDevice*)Unsafe.AsPointer(ref this));
         }
@@ -104,7 +104,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(15)]
         [return: NativeTypeName("plume::RenderCommandSemaphore *")]
-        public RenderCommandSemaphore* CreateCommandSemaphoreRaw()
+        public RenderCommandSemaphore* CreateCommandSemaphore()
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderCommandSemaphore*>)LpVtbl[15])((RenderDevice*)Unsafe.AsPointer(ref this));
         }
@@ -112,7 +112,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(16)]
         [return: NativeTypeName("plume::RenderFramebuffer *")]
-        public RenderFramebuffer* CreateFramebufferRaw([NativeTypeName("const RenderFramebufferDesc &")] RenderFramebufferDesc* desc)
+        public RenderFramebuffer* CreateFramebuffer([NativeTypeName("const RenderFramebufferDesc &")] RenderFramebufferDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, RenderFramebufferDesc*, RenderFramebuffer*>)LpVtbl[16])((RenderDevice*)Unsafe.AsPointer(ref this), desc);
         }
@@ -120,7 +120,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(17)]
         [return: NativeTypeName("plume::RenderQueryPool *")]
-        public RenderQueryPool* CreateQueryPoolRaw([NativeTypeName("uint32_t")] uint queryCount)
+        public RenderQueryPool* CreateQueryPool([NativeTypeName("uint32_t")] uint queryCount)
         {
             return ((delegate* unmanaged[Thiscall]<RenderDevice*, uint, RenderQueryPool*>)LpVtbl[17])((RenderDevice*)Unsafe.AsPointer(ref this), queryCount);
         }

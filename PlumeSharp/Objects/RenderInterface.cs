@@ -16,7 +16,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(2)]
         [return: NativeTypeName("plume::RenderDevice *")]
-        public RenderDevice* CreateDeviceRaw([NativeTypeName("const char *")] sbyte* preferredDeviceName = null)
+        public RenderDevice* CreateDevice([NativeTypeName("const char *")] sbyte* preferredDeviceName = null)
         {
             return ((delegate* unmanaged[Thiscall]<RenderInterface*, sbyte*, RenderDevice*>)LpVtbl[2])((RenderInterface*)Unsafe.AsPointer(ref this), preferredDeviceName);
         }

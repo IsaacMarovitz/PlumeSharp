@@ -21,7 +21,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(2)]
         [return: NativeTypeName("plume::RenderCommandList *")]
-        public RenderCommandList* CreateCommandListRaw()
+        public RenderCommandList* CreateCommandList()
         {
             return ((delegate* unmanaged[Thiscall]<RenderCommandQueue*, RenderCommandList*>)LpVtbl[2])((RenderCommandQueue*)Unsafe.AsPointer(ref this));
         }
@@ -29,7 +29,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(3)]
         [return: NativeTypeName("plume::RenderSwapChain *")]
-        public RenderSwapChain* CreateSwapChainRaw([NativeTypeName("const RenderSwapChainDesc &")] RenderSwapChainDesc* desc)
+        public RenderSwapChain* CreateSwapChain([NativeTypeName("const RenderSwapChainDesc &")] RenderSwapChainDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderCommandQueue*, RenderSwapChainDesc*, RenderSwapChain*>)LpVtbl[3])((RenderCommandQueue*)Unsafe.AsPointer(ref this), desc);
         }

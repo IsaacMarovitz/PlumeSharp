@@ -4,9 +4,9 @@ using SDL3;
 
 namespace PlumeSharp.ExampleTriangle
 {
-    class Program
+    internal static class Program
     {
-        static unsafe int Main(string[] args)
+        private static unsafe int Main()
         {
             if (!SDL.Init(SDL.InitFlags.Video))
             {
@@ -25,7 +25,7 @@ namespace PlumeSharp.ExampleTriangle
                 return 1;
             }
 
-            var renderInterface = GlobalMethods.CreateMetalInterfaceRaw();
+            var renderInterface = GlobalMethods.CreateMetalInterface();
             if (renderInterface == (RenderInterface*)IntPtr.Zero)
             {
                 Console.WriteLine("Failed to create interface");
@@ -41,7 +41,7 @@ namespace PlumeSharp.ExampleTriangle
             return 0;
         }
 
-        static unsafe void CreateFramebuffers(ref TestContext ctx)
+        private static unsafe void CreateFramebuffers(ref TestContext ctx)
         {
             // Create framebuffers for each swap chain image
             ctx.Framebuffers.Clear();
@@ -57,12 +57,12 @@ namespace PlumeSharp.ExampleTriangle
                     DepthAttachment = (RenderTexture*)IntPtr.Zero,
                 };
 
-                var framebuffer = ctx.Device->CreateFramebufferRaw(&fbDesc);
+                var framebuffer = ctx.Device->CreateFramebuffer(&fbDesc);
                 ctx.Framebuffers.Add((IntPtr)framebuffer);
             }
         }
 
-        static unsafe void CreatePipeline(ref TestContext ctx)
+        private static unsafe void CreatePipeline(ref TestContext ctx)
         {
             // Create a pipeline layout (without any descriptor sets or push constants)
             var layoutDesc = new RenderPipelineLayoutDesc
@@ -70,7 +70,7 @@ namespace PlumeSharp.ExampleTriangle
                 AllowInputLayout = true
             };
 
-            ctx.PipelineLayout = ctx.Device->CreatePipelineLayoutRaw(&layoutDesc);
+            ctx.PipelineLayout = ctx.Device->CreatePipelineLayout(&layoutDesc);
 
             // Get the shader format from the render interface
             var shaderFormat = ctx.RenderInterface->GetCapabilities()->ShaderFormat;
@@ -92,9 +92,9 @@ namespace PlumeSharp.ExampleTriangle
                     fixed (void* vertData = vertSource)
                     fixed (void* fragData = fragSource)
                     {
-                        vertexShader = ctx.Device->CreateShaderRaw(vertData, (ulong)vertSource.Length,
+                        vertexShader = ctx.Device->CreateShader(vertData, (ulong)vertSource.Length,
                             (sbyte*)vertEntry, RenderShaderFormat.Metal);
-                        fragmentShader = ctx.Device->CreateShaderRaw(fragData, (ulong)fragSource.Length,
+                        fragmentShader = ctx.Device->CreateShader(fragData, (ulong)fragSource.Length,
                             (sbyte*)fragEntry, RenderShaderFormat.Metal);
                     }
 
@@ -139,14 +139,14 @@ namespace PlumeSharp.ExampleTriangle
                 pipleineDesc.RenderTargetFormat[0] = RenderFormat.B8G8R8A8Unorm;
                 pipleineDesc.RenderTargetBlend[0] = RenderBlendDesc.Copy();
 
-                ctx.Pipeline = ctx.Device->CreateGraphicsPipelineRaw(&pipleineDesc);
+                ctx.Pipeline = ctx.Device->CreateGraphicsPipeline(&pipleineDesc);
             }
 
             Marshal.ZeroFreeCoTaskMemUTF8(positionSemantic);
             Marshal.ZeroFreeCoTaskMemUTF8(colorSemantic);
         }
 
-        static unsafe void CreateVertexBuffer(ref TestContext ctx)
+        private static unsafe void CreateVertexBuffer(ref TestContext ctx)
         {
             // Define triangle vertices: position (x, y, z) and color (r, g, b, a)
             float[] vertices = [
@@ -157,7 +157,7 @@ namespace PlumeSharp.ExampleTriangle
 
             // Create vertex buffer
             var desc = RenderBufferDesc.VertexBuffer((ulong)(sizeof(float) * vertices.Length), RenderHeapType.Upload);
-            ctx.VertexBuffer = ctx.Device->CreateBufferRaw(&desc);
+            ctx.VertexBuffer = ctx.Device->CreateBuffer(&desc);
 
             // Map buffer and copy vertex data
             Marshal.Copy(vertices, 0, (IntPtr)ctx.VertexBuffer->Map(), vertices.Length);
@@ -174,18 +174,18 @@ namespace PlumeSharp.ExampleTriangle
             };
         }
 
-        static unsafe void InitializeRenderResources(ref TestContext ctx, RenderInterface* renderInterface)
+        private static unsafe void InitializeRenderResources(ref TestContext ctx, RenderInterface* renderInterface)
         {
             // Create device
             var preferredDeviceName = Marshal.StringToCoTaskMemUTF8("");
-            ctx.Device = renderInterface->CreateDeviceRaw((sbyte*)preferredDeviceName);
+            ctx.Device = renderInterface->CreateDevice((sbyte*)preferredDeviceName);
             Marshal.ZeroFreeCoTaskMemUTF8(preferredDeviceName);
 
             // Create command queue for graphics
-            ctx.CommandQueue = ctx.Device->CreateCommandQueueRaw(RenderCommandListType.Direct);
+            ctx.CommandQueue = ctx.Device->CreateCommandQueue(RenderCommandListType.Direct);
 
             // Create a command fence
-            ctx.Fence = ctx.Device->CreateCommandFenceRaw();
+            ctx.Fence = ctx.Device->CreateCommandFence();
 
             // Create a swap chain for the window using the render window from init
             var desc = new RenderSwapChainDesc
@@ -194,19 +194,19 @@ namespace PlumeSharp.ExampleTriangle
                 Format = RenderFormat.B8G8R8A8Unorm,
                 TextureCount = 2
             };
-            ctx.SwapChain = ctx.CommandQueue->CreateSwapChainRaw(&desc);
+            ctx.SwapChain = ctx.CommandQueue->CreateSwapChain(&desc);
 
             // Explicitly resize the swapchain to create the textures
             ctx.SwapChain->Resize();
 
             // Create command list
-            ctx.CommandList = ctx.CommandQueue->CreateCommandListRaw();
+            ctx.CommandList = ctx.CommandQueue->CreateCommandList();
 
             // Create acquire semaphore for swap chain synchronization
-            ctx.AcquireSemaphore = ctx.Device->CreateCommandSemaphoreRaw();
+            ctx.AcquireSemaphore = ctx.Device->CreateCommandSemaphore();
 
             // Create command fence for synchronization
-            ctx.CommandFence = ctx.Device->CreateCommandFenceRaw();
+            ctx.CommandFence = ctx.Device->CreateCommandFence();
 
             // Create framebuffers for each swap chain image
             CreateFramebuffers(ref ctx);
@@ -218,7 +218,7 @@ namespace PlumeSharp.ExampleTriangle
             CreateVertexBuffer(ref ctx);
         }
 
-        static unsafe void CreateContext(ref TestContext ctx, RenderInterface* renderInterface, RenderWindow window,
+        private static unsafe void CreateContext(ref TestContext ctx, RenderInterface* renderInterface, RenderWindow window,
             string apiName)
         {
             ctx.RenderInterface = renderInterface;
@@ -228,7 +228,7 @@ namespace PlumeSharp.ExampleTriangle
             InitializeRenderResources(ref ctx, renderInterface);
         }
 
-        static unsafe void Resize(ref TestContext ctx, int width, int height)
+        private static unsafe void Resize(ref TestContext ctx, int width, int height)
         {
             Console.WriteLine($"Resizing triangle example to {width}x{height}");
 
@@ -253,7 +253,7 @@ namespace PlumeSharp.ExampleTriangle
 
         private static int _counter;
 
-        static unsafe void Render(ref TestContext ctx)
+        private static unsafe void Render(ref TestContext ctx)
         {
             if (_counter++ % 60 == 0)
             {
@@ -278,11 +278,9 @@ namespace PlumeSharp.ExampleTriangle
             // Set up viewport and scissor
             var width = ctx.SwapChain->GetWidth();
             var height = ctx.SwapChain->GetHeight();
-            var viewport = new RenderViewport(0.0f, 0.0f, width, height);
-            var scissor = new RenderRect(0, 0, (int)width, (int)height);
 
-            ctx.CommandList->SetViewports(&viewport, 1);
-            ctx.CommandList->SetScissors(&scissor, 1);
+            ctx.CommandList->SetViewports(new RenderViewport(0.0f, 0.0f, width, height));
+            ctx.CommandList->SetScissors(new RenderRect(0, 0, (int)width, (int)height));
 
             // Clear with a dark blue color
             var clearColor = new RenderColor(0.0f, 0.0f, 0.2f);
@@ -309,7 +307,7 @@ namespace PlumeSharp.ExampleTriangle
             // Create semaphores if needed
             while (ctx.ReleaseSemaphores.Count < ctx.SwapChain->GetTextureCount())
             {
-                ctx.ReleaseSemaphores.Add((nint)ctx.Device->CreateCommandSemaphoreRaw());
+                ctx.ReleaseSemaphores.Add((nint)ctx.Device->CreateCommandSemaphore());
             }
 
             // Submit and present
@@ -326,7 +324,7 @@ namespace PlumeSharp.ExampleTriangle
             ctx.CommandQueue->WaitForCommandFence(ctx.Fence);
         }
 
-        static unsafe void RenderInterfaceTest(RenderInterface* renderInterface, nint window, string apiName)
+        private static unsafe void RenderInterfaceTest(RenderInterface* renderInterface, nint window, string apiName)
         {
             var windowTitle = $"Plume Example ({apiName})";
             SDL.SetWindowTitle(window, windowTitle);
@@ -342,8 +340,7 @@ namespace PlumeSharp.ExampleTriangle
             var running = true;
             while (running)
             {
-                SDL.Event sdlEvent;
-                while (SDL.PollEvent(out sdlEvent))
+                while (SDL.PollEvent(out var sdlEvent))
                 {
                     switch (sdlEvent.Type)
                     {
@@ -363,7 +360,7 @@ namespace PlumeSharp.ExampleTriangle
             }
         }
 
-        unsafe struct TestContext
+        private unsafe struct TestContext
         {
             public RenderInterface* RenderInterface;
             public string ApiName;

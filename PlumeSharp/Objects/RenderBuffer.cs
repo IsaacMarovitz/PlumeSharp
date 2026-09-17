@@ -36,7 +36,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(4)]
         [return: NativeTypeName("plume::RenderBufferFormattedView *")]
-        public RenderBufferFormattedView* CreateBufferFormattedViewRaw([NativeTypeName("plume::RenderFormat")] RenderFormat format)
+        public RenderBufferFormattedView* CreateBufferFormattedView([NativeTypeName("plume::RenderFormat")] RenderFormat format)
         {
             return ((delegate* unmanaged[Thiscall]<RenderBuffer*, RenderFormat, RenderBufferFormattedView*>)LpVtbl[4])((RenderBuffer*)Unsafe.AsPointer(ref this), format);
         }

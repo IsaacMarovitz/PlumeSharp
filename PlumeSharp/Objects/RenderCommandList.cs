@@ -57,19 +57,44 @@ namespace Plume
             }
         }
 
-        public void SetViewports(RenderViewport* viewport)
+        public void SetViewports(in RenderViewport viewport)
         {
-            SetViewports(viewport, 1);
+            fixed (RenderViewport* pViewport = &viewport)
+            {
+                SetViewports(pViewport, 1);
+            }
         }
 
-        public void SetScissors(RenderRect* scissorRect)
+        public void SetViewports(ReadOnlySpan<RenderViewport> viewports)
         {
-            SetScissors(scissorRect, 1);
+            fixed (RenderViewport* pViewports = viewports)
+            {
+                SetViewports(pViewports, (uint)viewports.Length);
+            }
         }
 
-        public void ClearDepth(bool clearDepth = true, float depthValue = 1.0f, RenderRect* clearRects = null, uint clearRectsCount = 0)
+        public void SetScissors(in RenderRect scissorRect)
         {
-            ClearDepthStencil(clearDepth, false, depthValue, 0, clearRects, clearRectsCount);
+            fixed (RenderRect* pScissor = &scissorRect)
+            {
+                SetScissors(pScissor, 1);
+            }
+        }
+
+        public void SetScissors(ReadOnlySpan<RenderRect> scissorRects)
+        {
+            fixed (RenderRect* pScissors = scissorRects)
+            {
+                SetScissors(pScissors, (uint)scissorRects.Length);
+            }
+        }
+
+        public void ClearDepth(bool clearDepth = true, float depthValue = 1.0f, ReadOnlySpan<RenderRect> clearRects = default)
+        {
+            fixed (RenderRect* pClearRects = clearRects)
+            {
+                ClearDepthStencil(clearDepth, false, depthValue, 0, pClearRects, (uint)clearRects.Length);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

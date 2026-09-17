@@ -16,7 +16,7 @@ namespace Plume
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(2)]
         [return: NativeTypeName("plume::RenderTextureView *")]
-        public readonly RenderTextureView* CreateTextureViewRaw([NativeTypeName("const RenderTextureViewDesc &")] RenderTextureViewDesc* desc)
+        public readonly RenderTextureView* CreateTextureView([NativeTypeName("const RenderTextureViewDesc &")] RenderTextureViewDesc* desc)
         {
             return ((delegate* unmanaged[Thiscall]<RenderTexture*, RenderTextureViewDesc*, RenderTextureView*>)LpVtbl[2])((RenderTexture*)Unsafe.AsPointer(in this), desc);
         }
