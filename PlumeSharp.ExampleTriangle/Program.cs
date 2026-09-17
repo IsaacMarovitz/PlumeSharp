@@ -269,8 +269,7 @@ namespace PlumeSharp.ExampleTriangle
 
             // Get the current swap chain texture and transition to render target
             var swapChainTexture = ctx.SwapChain->GetTexture(imageIndex);
-            var barrier = new RenderTextureBarrier(swapChainTexture, RenderTextureLayout.ColorWrite);
-            ctx.CommandList->Barriers(RenderBarrierStages.Graphics, &barrier);
+            ctx.CommandList->Barriers(RenderBarrierStages.Graphics, new RenderTextureBarrier(swapChainTexture, RenderTextureLayout.ColorWrite));
 
             // Get the current swapchain framebuffer
             var framebuffer = (RenderFramebuffer*)ctx.Framebuffers[(int)imageIndex];
@@ -302,12 +301,7 @@ namespace PlumeSharp.ExampleTriangle
             ctx.CommandList->DrawInstanced(3, 1, 0, 0);
 
             // Transition to present layout
-            var presentBarrier = new RenderTextureBarrier
-            {
-                Texture = swapChainTexture,
-                Layout = RenderTextureLayout.Present
-            };
-            ctx.CommandList->Barriers(RenderBarrierStages.None, &presentBarrier);
+            ctx.CommandList->Barriers(RenderBarrierStages.None, new RenderTextureBarrier(swapChainTexture, RenderTextureLayout.Present));
 
             // End command recording
             ctx.CommandList->End();

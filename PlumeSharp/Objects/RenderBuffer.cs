@@ -6,12 +6,11 @@ namespace Plume
     {
         public void** LpVtbl;
 
-        // TODO: Deal with this
-        // [return: NativeTypeName("plume::RenderBufferReference")]
-        // public readonly RenderBufferReference At([NativeTypeName("uint64_t")] ulong offset)
-        // {
-        //     return new RenderBufferReference(this, offset);
-        // }
+        [return: NativeTypeName("plume::RenderBufferReference")]
+        public readonly RenderBufferReference At([NativeTypeName("uint64_t")] ulong offset)
+        {
+            return new RenderBufferReference((RenderBuffer*)Unsafe.AsPointer(in this), offset);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(1)]

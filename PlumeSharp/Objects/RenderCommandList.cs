@@ -7,47 +7,55 @@ namespace Plume
     {
         public void** LpVtbl;
 
-        public void Barriers(RenderBarrierStages stages, RenderBufferBarrier* barrier)
+        public void Barriers(RenderBarrierStages stages, in RenderBufferBarrier barrier)
         {
-            Barriers(stages, barrier, 1, null, 0);
+            fixed (RenderBufferBarrier* pBarrier = &barrier)
+            {
+                Barriers(stages, pBarrier, 1, null, 0);
+            }
         }
 
-        public void Barriers(RenderBarrierStages stages, RenderTextureBarrier* barrier)
+        public void Barriers(RenderBarrierStages stages, in RenderTextureBarrier barrier)
         {
-            Barriers(stages, null, 0, barrier, 1);
+            fixed (RenderTextureBarrier* pBarrier = &barrier)
+            {
+                Barriers(stages, null, 0, pBarrier, 1);
+            }
         }
 
-        public void Barriers(RenderBarrierStages stages, RenderBufferBarrier* bufferBarrier, RenderTextureBarrier* textureBarrier)
+        public void Barriers(RenderBarrierStages stages, in RenderBufferBarrier bufferBarrier, in RenderTextureBarrier textureBarrier)
         {
-            Barriers(stages, bufferBarrier, 1, textureBarrier, 1);
+            fixed (RenderBufferBarrier* pBufferBarrier = &bufferBarrier)
+            fixed (RenderTextureBarrier* pTextureBarrier = &textureBarrier)
+            {
+                Barriers(stages, pBufferBarrier, 1, pTextureBarrier, 1);
+            }
         }
 
-        public void Barriers(RenderBarrierStages stages, RenderBufferBarrier* bufferBarriers, uint bufferBarriersCount)
+        public void Barriers(RenderBarrierStages stages, ReadOnlySpan<RenderBufferBarrier> bufferBarriers)
         {
-            Barriers(stages, bufferBarriers, bufferBarriersCount, null, 0);
+            fixed (RenderBufferBarrier* pBufferBarriers = bufferBarriers)
+            {
+                Barriers(stages, pBufferBarriers, (uint)bufferBarriers.Length, null, 0);
+            }
         }
 
-        // TODO: Deal with this
-        // public void Barriers(RenderBarrierStages stages, List<RenderBufferBarrier> bufferBarriers)
-        // {
-        //     Barriers(stages, bufferBarriers, bufferBarriers.Count, null, 0);
-        // }
-
-        public void Barriers(RenderBarrierStages stages, RenderTextureBarrier* textureBarriers, uint textureBarriersCount)
+        public void Barriers(RenderBarrierStages stages, ReadOnlySpan<RenderTextureBarrier> textureBarriers)
         {
-            Barriers(stages, null, 0, textureBarriers, textureBarriersCount);
+            fixed (RenderTextureBarrier* pTextureBarriers = textureBarriers)
+            {
+                Barriers(stages, null, 0, pTextureBarriers, (uint)textureBarriers.Length);
+            }
         }
 
-        // TODO: Deal with this
-        // public void Barriers(RenderBarrierStages stages, vector<RenderTextureBarrier>* textureBarriers)
-        // {
-        //     Barriers(stages, null, 0, textureBarriers->data(), unchecked((uint)(textureBarriers->size())));
-        // }
-        //
-        // public void Barriers(RenderBarrierStages stages, vector<RenderBufferBarrier>* bufferBarriers, vector<RenderTextureBarrier>* textureBarriers)
-        // {
-        //     Barriers(stages, bufferBarriers->data(), unchecked((uint)(bufferBarriers->size())), textureBarriers->data(), unchecked((uint)(textureBarriers->size())));
-        // }
+        public void Barriers(RenderBarrierStages stages, ReadOnlySpan<RenderBufferBarrier> bufferBarriers, ReadOnlySpan<RenderTextureBarrier> textureBarriers)
+        {
+            fixed (RenderBufferBarrier* pBufferBarriers = bufferBarriers)
+            fixed (RenderTextureBarrier* pTextureBarriers = textureBarriers)
+            {
+                Barriers(stages, pBufferBarriers, (uint)bufferBarriers.Length, pTextureBarriers, (uint)textureBarriers.Length);
+            }
+        }
 
         public void SetViewports(RenderViewport* viewport)
         {
