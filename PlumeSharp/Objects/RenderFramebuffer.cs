@@ -4,13 +4,13 @@ namespace Plume
 {
     public unsafe struct RenderFramebuffer : IDisposable
     {
-        public void** LpVtbl;
+        private void** _lpVtbl;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(1)]
         public void Dispose()
         {
-            ((delegate* unmanaged[Thiscall]<RenderFramebuffer*, void>)LpVtbl[1])((RenderFramebuffer*)Unsafe.AsPointer(ref this));
+            ((delegate* unmanaged[Thiscall]<RenderFramebuffer*, void>)_lpVtbl[1])((RenderFramebuffer*)Unsafe.AsPointer(ref this));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -18,7 +18,7 @@ namespace Plume
         [return: NativeTypeName("uint32_t")]
         public readonly uint GetWidth()
         {
-            return ((delegate* unmanaged[Thiscall]<RenderFramebuffer*, uint>)LpVtbl[2])((RenderFramebuffer*)Unsafe.AsPointer(in this));
+            return ((delegate* unmanaged[Thiscall]<RenderFramebuffer*, uint>)_lpVtbl[2])((RenderFramebuffer*)Unsafe.AsPointer(in this));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,19 +26,7 @@ namespace Plume
         [return: NativeTypeName("uint32_t")]
         public readonly uint GetHeight()
         {
-            return ((delegate* unmanaged[Thiscall]<RenderFramebuffer*, uint>)LpVtbl[3])((RenderFramebuffer*)Unsafe.AsPointer(in this));
-        }
-
-        public struct Vtbl
-        {
-            [NativeTypeName("void () noexcept")]
-            public delegate* unmanaged[Thiscall]<RenderFramebuffer*, void> Dispose;
-
-            [NativeTypeName("uint32_t () const")]
-            public delegate* unmanaged[Thiscall]<RenderFramebuffer*, uint> GetWidth;
-
-            [NativeTypeName("uint32_t () const")]
-            public delegate* unmanaged[Thiscall]<RenderFramebuffer*, uint> GetHeight;
+            return ((delegate* unmanaged[Thiscall]<RenderFramebuffer*, uint>)_lpVtbl[3])((RenderFramebuffer*)Unsafe.AsPointer(in this));
         }
     }
 }

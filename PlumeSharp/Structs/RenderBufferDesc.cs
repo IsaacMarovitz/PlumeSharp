@@ -1,5 +1,3 @@
-using static Plume.RenderHeapType;
-
 namespace Plume
 {
     public struct RenderBufferDesc
@@ -8,7 +6,7 @@ namespace Plume
         public ulong Size = 0;
 
         [NativeTypeName("plume::RenderHeapType")]
-        public RenderHeapType HeapType = Unknown;
+        public RenderHeapType HeapType = RenderHeapType.Unknown;
 
         [NativeTypeName("plume::RenderBufferFlags")]
         public RenderBufferFlags Flags = RenderBufferFlags.None;
@@ -23,7 +21,7 @@ namespace Plume
             var desc = new RenderBufferDesc
             {
                 Size = size,
-                HeapType = Default,
+                HeapType = RenderHeapType.Default,
                 Flags = flags
             };
 
@@ -35,7 +33,7 @@ namespace Plume
         {
             var desc = new RenderBufferDesc
             {
-                HeapType = Upload,
+                HeapType = RenderHeapType.Upload,
                 Size = size,
                 Flags = flags
             };
@@ -48,7 +46,7 @@ namespace Plume
         {
             var desc = new RenderBufferDesc
             {
-                HeapType = Readback,
+                HeapType = RenderHeapType.Readback,
                 Size = size,
                 Flags = flags
             };
@@ -88,7 +86,7 @@ namespace Plume
             var desc = new RenderBufferDesc
             {
                 Size = size,
-                HeapType = Default,
+                HeapType = RenderHeapType.Default,
                 Flags = RenderBufferFlags.AccelerationStructure
             };
 

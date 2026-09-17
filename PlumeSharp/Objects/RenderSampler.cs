@@ -4,19 +4,13 @@ namespace Plume
 {
     public unsafe struct RenderSampler : IDisposable
     {
-        public void** LpVtbl;
+        private void** _lpVtbl;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(1)]
         public void Dispose()
         {
-            ((delegate* unmanaged[Thiscall]<RenderSampler*, void>)LpVtbl[1])((RenderSampler*)Unsafe.AsPointer(ref this));
-        }
-
-        public struct Vtbl
-        {
-            [NativeTypeName("void () noexcept")]
-            public delegate* unmanaged[Thiscall]<RenderSampler*, void> Dispose;
+            ((delegate* unmanaged[Thiscall]<RenderSampler*, void>)_lpVtbl[1])((RenderSampler*)Unsafe.AsPointer(ref this));
         }
     }
 }
