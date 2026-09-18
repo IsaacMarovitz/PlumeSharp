@@ -3,21 +3,23 @@ using System.Runtime.Versioning;
 
 namespace Plume
 {
-    public static unsafe class GlobalMethods
+    public static unsafe partial class GlobalMethods
     {
         [SupportedOSPlatform("windows")]
-        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateD3D12InterfaceRaw")]
+        [LibraryImport("plume", EntryPoint = "CreateD3D12InterfaceRaw")]
+        [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
         [return: NativeTypeName("plume::RenderInterface *")]
-        public static extern RenderInterface* CreateD3D12Interface();
+        public static partial RenderInterface* CreateD3D12Interface();
 
         [SupportedOSPlatform("macos")]
-        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateMetalInterfaceRaw")]
+        [LibraryImport("plume", EntryPoint = "CreateMetalInterfaceRaw")]
+        [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
         [return: NativeTypeName("plume::RenderInterface *")]
-        public static extern RenderInterface* CreateMetalInterface();
+        public static partial RenderInterface* CreateMetalInterface();
 
-        [DllImport("native/libplume.a", CallingConvention = CallingConvention.Cdecl, EntryPoint = "CreateVulkanInterfaceRaw")]
-        [return: NativeTypeName("plume::RenderInterface *")]
-        public static extern RenderInterface* CreateVulkanInterface();
+        [LibraryImport("plume", EntryPoint = "CreateVulkanInterfaceRaw")]
+        [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+        public static partial RenderInterface* CreateVulkanInterface();
 
         [return: NativeTypeName("uint32_t")]
         public static uint RenderFormatSize([NativeTypeName("plume::RenderFormat")] RenderFormat format)
