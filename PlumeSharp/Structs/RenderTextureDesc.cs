@@ -21,7 +21,7 @@ namespace Plume
         public uint ArraySize = 0;
 
         [NativeTypeName("plume::RenderMultisampling")]
-        public RenderMultisampling Multisampling = default;
+        public RenderMultisampling Multisampling = new();
 
         [NativeTypeName("plume::RenderFormat")]
         public RenderFormat Format = RenderFormat.Unknown;
@@ -76,7 +76,7 @@ namespace Plume
         }
 
         [return: NativeTypeName("plume::RenderTextureDesc")]
-        public static RenderTextureDesc ColorTarget([NativeTypeName("uint32_t")] uint width, [NativeTypeName("uint32_t")] uint height, [NativeTypeName("plume::RenderFormat")] RenderFormat format, [NativeTypeName("plume::RenderMultisampling")] RenderMultisampling multisampling = default, [NativeTypeName("const RenderClearValue *")] RenderClearValue* optimizedClearValue = null, [NativeTypeName("plume::RenderTextureFlags")] RenderTextureFlags flags = RenderTextureFlags.None)
+        public static RenderTextureDesc ColorTarget([NativeTypeName("uint32_t")] uint width, [NativeTypeName("uint32_t")] uint height, [NativeTypeName("plume::RenderFormat")] RenderFormat format, [NativeTypeName("plume::RenderMultisampling")] RenderMultisampling? multisampling = null, [NativeTypeName("const RenderClearValue *")] RenderClearValue* optimizedClearValue = null, [NativeTypeName("plume::RenderTextureFlags")] RenderTextureFlags flags = RenderTextureFlags.None)
         {
             var desc = new RenderTextureDesc
             {
@@ -88,7 +88,7 @@ namespace Plume
                 MipLevels = 1,
                 ArraySize = 1,
                 Format = format,
-                Multisampling = multisampling,
+                Multisampling = multisampling ?? new RenderMultisampling(),
                 Flags = flags | RenderTextureFlags.RenderTarget,
                 OptimizedClearValue = optimizedClearValue
             };
@@ -97,7 +97,7 @@ namespace Plume
         }
 
         [return: NativeTypeName("plume::RenderTextureDesc")]
-        public static RenderTextureDesc DepthTarget([NativeTypeName("uint32_t")] uint width, [NativeTypeName("uint32_t")] uint height, [NativeTypeName("plume::RenderFormat")] RenderFormat format, [NativeTypeName("plume::RenderMultisampling")] RenderMultisampling multisampling = default, [NativeTypeName("const RenderClearValue *")] RenderClearValue* optimizedClearValue = null, [NativeTypeName("plume::RenderTextureFlags")] RenderTextureFlags flags = RenderTextureFlags.None)
+        public static RenderTextureDesc DepthTarget([NativeTypeName("uint32_t")] uint width, [NativeTypeName("uint32_t")] uint height, [NativeTypeName("plume::RenderFormat")] RenderFormat format, [NativeTypeName("plume::RenderMultisampling")] RenderMultisampling? multisampling = null, [NativeTypeName("const RenderClearValue *")] RenderClearValue* optimizedClearValue = null, [NativeTypeName("plume::RenderTextureFlags")] RenderTextureFlags flags = RenderTextureFlags.None)
         {
             var desc = new RenderTextureDesc
             {
@@ -109,7 +109,7 @@ namespace Plume
                 MipLevels = 1,
                 ArraySize = 1,
                 Format = format,
-                Multisampling = multisampling,
+                Multisampling = multisampling ?? new RenderMultisampling(),
                 Flags = flags | RenderTextureFlags.DepthTarget,
                 OptimizedClearValue = optimizedClearValue
             };

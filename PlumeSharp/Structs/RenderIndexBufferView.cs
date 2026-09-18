@@ -3,7 +3,7 @@ namespace Plume
     public struct RenderIndexBufferView
     {
         [NativeTypeName("plume::RenderBufferReference")]
-        public RenderBufferReference Buffer = default;
+        public RenderBufferReference Buffer = new();
 
         [NativeTypeName("uint32_t")]
         public uint Size = 0;

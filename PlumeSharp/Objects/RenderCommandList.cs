@@ -266,9 +266,9 @@ namespace Plume
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [VtblIndex(26)]
-        public void ClearColor([NativeTypeName("uint32_t")] uint attachmentIndex = 0, [NativeTypeName("plume::RenderColor")] RenderColor colorValue = default, [NativeTypeName("const RenderRect *")] RenderRect* clearRects = null, [NativeTypeName("uint32_t")] uint clearRectsCount = 0)
+        public void ClearColor([NativeTypeName("uint32_t")] uint attachmentIndex = 0, [NativeTypeName("plume::RenderColor")] RenderColor? colorValue = null, [NativeTypeName("const RenderRect *")] RenderRect* clearRects = null, [NativeTypeName("uint32_t")] uint clearRectsCount = 0)
         {
-            ((delegate* unmanaged[Thiscall]<RenderCommandList*, uint, RenderColor, RenderRect*, uint, void>)_lpVtbl[26])((RenderCommandList*)Unsafe.AsPointer(ref this), attachmentIndex, colorValue, clearRects, clearRectsCount);
+            ((delegate* unmanaged[Thiscall]<RenderCommandList*, uint, RenderColor, RenderRect*, uint, void>)_lpVtbl[26])((RenderCommandList*)Unsafe.AsPointer(ref this), attachmentIndex, colorValue ?? new RenderColor(), clearRects, clearRectsCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

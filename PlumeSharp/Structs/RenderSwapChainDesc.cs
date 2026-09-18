@@ -3,7 +3,7 @@ namespace Plume
     public struct RenderSwapChainDesc
     {
         [NativeTypeName("plume::RenderWindow")]
-        public RenderWindow RenderWindow = default;
+        public RenderWindow RenderWindow = new();
 
         [NativeTypeName("plume::RenderFormat")]
         public RenderFormat Format = RenderFormat.Unknown;
